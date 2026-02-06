@@ -1,9 +1,3 @@
-import { LoginForm } from '@/features/auth/ui/LoginForm';
-
 export function LoginPage() {
-    return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-            <LoginForm />
-        </div>
-    );
+    return <div className="p-6">Login page</div>;
 }

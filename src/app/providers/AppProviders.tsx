@@ -3,9 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { QueryProvider } from './QueryProvider';
 import { ToastHost } from '@/shared/ui/ToastHost';
 
-type Props = { children: ReactNode };
-
-export function AppProviders({ children }: Props) {
+export function AppProviders({ children }: { children: ReactNode }) {
     return (
         <QueryProvider>
             <BrowserRouter>
