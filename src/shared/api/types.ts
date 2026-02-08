@@ -1,5 +1,5 @@
 export type ApiError = {
-    status: number;
-    message: string;
-    raw?: unknown;
+  status: number;
+  message: string;
+  raw?: unknown;
 };
