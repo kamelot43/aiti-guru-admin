@@ -1,0 +1,268 @@
+.page {
+  min-height: 100%;
+  background: #f5f7fb;
+}
+
+.table {
+  :global(.ant-table-tbody > tr.ant-table-row-selected > td) {
+    background: transparent !important;
+  }
+
+  :global(.ant-table-tbody > tr.ant-table-row-selected:hover > td) {
+    background: transparent !important;
+  }
+}
+
+.topBar {
+  background: #ffffff;
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 24px;
+  align-items: center;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.topTitle {
+  margin: 0 !important;
+  font-weight: 700 !important;
+}
+
+.search {
+  max-width: 760px;
+  border-radius: 14px;
+}
+
+.content {
+  padding: 24px;
+}
+
+.sectionHeader {
+  background: #ffffff;
+  border-radius: 16px 16px 0 0;
+  padding: 18px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sectionTitle {
+  margin: 0 !important;
+  font-weight: 700 !important;
+}
+
+.headerActions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.refreshBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+.addBtn {
+  height: 44px;
+  border-radius: 12px;
+  padding: 0 18px;
+}
+
+.table {
+  background: #ffffff;
+  border-radius: 0 0 16px 16px;
+  overflow: hidden;
+
+  :global(.ant-table) {
+    background: #ffffff;
+  }
+
+  :global(.ant-table-thead > tr > th) {
+    color: #9aa3b2;
+    font-weight: 600;
+  }
+
+  :global(.ant-table-tbody > tr > td) {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+}
+
+.tableCheckbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid #cfd7e6;
+  background: #ffffff;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tableCheckbox:focus-visible {
+  outline: 2px solid rgba(47, 107, 255, 0.35);
+  outline-offset: 2px;
+}
+
+.tableCheckboxChecked {
+  background: #2f6bff;
+  border-color: #2f6bff;
+}
+
+.tableCheckboxIndeterminate {
+  border-color: #2f6bff;
+  position: relative;
+}
+
+.tableCheckboxIndeterminate::after {
+  content: "";
+  width: 8px;
+  height: 2px;
+  background: #2f6bff;
+  border-radius: 2px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.table {
+  :global(th.ant-table-selection-column),
+  :global(td.ant-table-selection-column) {
+    width: 44px;
+    padding: 0 !important;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  :global(.ant-table-selection-column .ant-table-selection) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+
+
+.rowSelected {
+  position: relative;
+
+  td:first-child {
+    position: relative;
+  }
+
+  td:first-child::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #2f6bff;
+    border-radius: 0;
+  }
+}
+
+.nameCell {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #d9d9d9;
+}
+
+.nameText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nameTitle {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.nameSub {
+  color: #9aa3b2;
+  font-size: 12px;
+}
+
+.vendor {
+  font-weight: 600;
+}
+
+.ratingOk {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.ratingBad {
+  color: #ff3b30;
+  font-weight: 700;
+}
+
+.price {
+  font-variant-numeric: tabular-nums;
+}
+
+.rowActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.addToCartBtn {
+  width: 44px;
+  height: 28px;
+  border-radius: 999px;
+  border: 0;
+  background: #2f6bff;
+  color: white;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+
+  &:hover {
+    background: #2557e6;
+  }
+}
+
+.moreBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid #e6eaf2;
+  background: #ffffff;
+  color: #9aa3b2;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #cfd7e6;
+    color: #6b7280;
+  }
+}
+
+.footer {
+  background: #ffffff;
+  margin-top: 0;
+  padding: 16px 18px;
+  border-top: 1px solid #eef2f7;
+  border-radius: 0 0 16px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.counter {
+  color: #9aa3b2;
+}
