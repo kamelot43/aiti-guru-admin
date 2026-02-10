@@ -1,6 +1,7 @@
 import { Button, Input, Pagination, Table, Typography } from "antd";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { PlusOutlined, ReloadOutlined, SearchOutlined, MoreOutlined } from "@ant-design/icons";
+import {ProductModal, type ProductFormValues} from "../../shared/components/ProductModal/ProductModal";
 import { useMemo, useState } from "react";
 import type { Key } from "react";
 import styles from "./ProductsPage.module.scss";
@@ -13,7 +14,6 @@ type SortState = {
 };
 
 function formatPriceRub(value: number) {
-  // 48 652,00
   return new Intl.NumberFormat("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
 }
 
@@ -22,6 +22,23 @@ export function ProductsPage() {
   const [sort, setSort] = useState<SortState>({ field: undefined, order: undefined });
   const [page, setPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [productModalMode, setProductModalMode] = useState<"create" | "edit">("create");
+  const [editingProduct, setEditingProduct] = useState<ProductRow | null>(null);
+
+  const openCreate = () => {
+    setProductModalMode("create");
+    setEditingProduct(null);
+    setIsProductModalOpen(true);
+  };
+
+  const openEdit = (p: ProductRow) => {
+    setProductModalMode("edit");
+    setEditingProduct(p);
+    setIsProductModalOpen(true);
+  };
+
+  const closeModal = () => setIsProductModalOpen(false);
 
   const pageSize = 20;
 
@@ -122,16 +139,30 @@ export function ProductsPage() {
       key: "actions",
       width: 120,
       align: "right",
-      render: () => (
+      render: (_: unknown, row: ProductRow) => (
           <div className={styles.rowActions}>
             <button className={styles.addToCartBtn} type="button" aria-label="Добавить в корзину">
               <PlusOutlined />
             </button>
-            <button className={styles.moreBtn} type="button" aria-label="Меню">
+            <button
+                className={styles.moreBtn}
+                type="button"
+                aria-label="Меню"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openEdit(row);
+                }}
+            >
               <MoreOutlined />
             </button>
           </div>
       ),
+    },
+    {
+      title: "",
+      key: "spacer",
+      width: 120,
+      render: () => null,
     },
   ];
 
@@ -239,7 +270,12 @@ export function ProductsPage() {
 
             <div className={styles.headerActions}>
               <Button icon={<ReloadOutlined />} className={styles.refreshBtn} />
-              <Button type="primary" icon={<PlusOutlined />} className={styles.addBtn}>
+              <Button
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  className={styles.addBtn}
+                  onClick={openCreate}
+              >
                 Добавить
               </Button>
             </div>
@@ -277,6 +313,16 @@ export function ProductsPage() {
                 total={total}
                 onChange={(p) => setPage(p)}
                 showSizeChanger={false}
+            />
+            <ProductModal
+                open={isProductModalOpen}
+                mode={productModalMode}
+                product={editingProduct}
+                onClose={closeModal}
+                onSubmit={(values: ProductFormValues) => {
+                  console.log(productModalMode, editingProduct?.id, values);
+                  closeModal();
+                }}
             />
           </div>
         </div>

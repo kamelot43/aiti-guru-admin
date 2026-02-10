@@ -1,0 +1,23 @@
+.modal {
+  :global(.ant-modal-content) {
+    border-radius: 16px;
+  }
+
+  :global(.ant-modal-title) {
+    font-weight: 700;
+  }
+}
+
+.form {
+  margin-top: 12px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.fullWidth {
+  width: 100%;
+}
