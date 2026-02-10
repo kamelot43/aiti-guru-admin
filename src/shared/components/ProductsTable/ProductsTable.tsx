@@ -103,9 +103,9 @@ export function ProductsTable({
       key: 'rating',
       sorter: true,
       render: (rating: number) => {
-          const safe = typeof rating === "number" ? rating : 0;
-          const cls = safe < 3 ? styles.ratingBad : styles.ratingOk;
-          return <span className={cls}>{safe.toFixed(1)}/5</span>;
+        const safe = typeof rating === 'number' ? rating : 0;
+        const cls = safe < 3 ? styles.ratingBad : styles.ratingOk;
+        return <span className={cls}>{safe.toFixed(1)}/5</span>;
       },
     },
     {
@@ -115,8 +115,8 @@ export function ProductsTable({
       align: 'right',
       sorter: true,
       render: (price: number) => {
-          const safe = typeof price === "number" ? price : 0;
-          return <span className={styles.price}>{formatPriceRub(safe)}</span>;
+        const safe = typeof price === 'number' ? price : 0;
+        return <span className={styles.price}>{formatPriceRub(safe)}</span>;
       },
     },
     {

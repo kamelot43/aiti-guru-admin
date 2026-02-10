@@ -1,7 +1,9 @@
+import debounce from 'lodash.debounce';
 import { Button, Input, Typography } from 'antd';
 import { PlusOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { message } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import type { Key } from 'react';
 
 import styles from './ProductsPage.module.scss';
@@ -19,7 +21,9 @@ type SortState = {
 };
 
 export function ProductsPage() {
-  const [search, setSearch] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchInput, setSearchInput] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [sort, setSort] = useState<SortState>({});
   const [page, setPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
@@ -31,6 +35,17 @@ export function ProductsPage() {
   const [rows, setRows] = useState<Product[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+  const abortRef = useRef<AbortController | null>(null);
+
+  const debouncedSetSearchQuery = useMemo(
+    () =>
+      debounce((value: string) => {
+        setSearchQuery(value);
+        setPage(1);
+      }, 800),
+    [],
+  );
 
   const pageSize = 20;
 
@@ -53,28 +68,89 @@ export function ProductsPage() {
   const order = sort.order ? (sort.order === 'ascend' ? 'asc' : 'desc') : undefined;
 
   const load = async () => {
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     setLoading(true);
     try {
       const res = await fetchProducts({
         limit: pageSize,
         skip,
-        search: search.trim() ? search.trim() : undefined,
+        search: searchQuery.trim() ? searchQuery.trim() : undefined,
         sortBy,
         order,
+        signal: controller.signal,
       });
 
       setRows(res.products);
       setTotal(res.total);
     } catch (e) {
+      if (e instanceof DOMException && e.name === 'AbortError') return;
       message.error('Не удалось загрузить товары');
     } finally {
-      setLoading(false);
+      if (abortRef.current === controller) setLoading(false);
     }
   };
 
   useEffect(() => {
+    if (!hydrated) return;
+
     void load();
-  }, [page, pageSize, skip, sortBy, order, search]);
+  }, [hydrated, page, pageSize, skip, sortBy, order, searchQuery]);
+
+  useEffect(() => {
+    return () => abortRef.current?.abort();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      debouncedSetSearchQuery.cancel();
+    };
+  }, [debouncedSetSearchQuery]);
+
+  useEffect(() => {
+    const q = searchParams.get('q') ?? '';
+    const pageFromUrl = Number(searchParams.get('page') ?? '1');
+    const sortBy = searchParams.get('sortBy') ?? undefined;
+    const order = searchParams.get('order') as 'asc' | 'desc' | null;
+
+    setSearchInput(q);
+    setSearchQuery(q);
+    setPage(Number.isFinite(pageFromUrl) && pageFromUrl > 0 ? pageFromUrl : 1);
+
+    if (sortBy && (order === 'asc' || order === 'desc')) {
+      setSort({
+        field: sortBy as keyof Product,
+        order: order === 'asc' ? 'ascend' : 'descend',
+      });
+    } else {
+      setSort({});
+    }
+
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    const next = new URLSearchParams(searchParams);
+
+    const q = searchQuery.trim();
+    if (q) next.set('q', q);
+    else next.delete('q');
+
+    if (page > 1) next.set('page', String(page));
+    else next.delete('page');
+
+    if (sort.field && sort.order) {
+      next.set('sortBy', String(sort.field));
+      next.set('order', sort.order === 'ascend' ? 'asc' : 'desc');
+    } else {
+      next.delete('sortBy');
+      next.delete('order');
+    }
+
+    setSearchParams(next, { replace: true });
+  }, [searchQuery, page, sort]);
 
   return (
     <div className={styles.page}>
@@ -84,10 +160,11 @@ export function ProductsPage() {
         </Typography.Title>
 
         <Input
-          value={search}
+          value={searchInput}
           onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(1);
+            const value = e.target.value;
+            setSearchInput(value);
+            debouncedSetSearchQuery(value);
           }}
           allowClear
           prefix={<SearchOutlined />}
@@ -117,6 +194,7 @@ export function ProductsPage() {
           page={page}
           pageSize={pageSize}
           loading={loading}
+          sort={sort}
           selectedRowKeys={selectedRowKeys}
           onSelectedRowKeysChange={setSelectedRowKeys}
           onPageChange={setPage}

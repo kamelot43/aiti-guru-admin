@@ -23,12 +23,14 @@ type Params = {
   sortBy?: string;
   order?: 'asc' | 'desc';
   search?: string;
+  signal?: AbortSignal;
 };
 
 const BASE_URL = 'https://dummyjson.com';
 
 export async function fetchProducts(params: Params): Promise<ProductsResponse> {
-  const { limit, skip, sortBy, order, search } = params;
+  const { limit, skip, sortBy, order, search, signal } = params;
+  let res;
 
   const url = search
     ? `${BASE_URL}/products/search?q=${search}&limit=${limit}&skip=${skip}`
@@ -36,7 +38,12 @@ export async function fetchProducts(params: Params): Promise<ProductsResponse> {
         sortBy ? `&sortBy=${sortBy}&order=${order}` : ''
       }`;
 
-  const res = await fetch(url);
+  if (signal) {
+    res = await fetch(url, { signal });
+  } else {
+    res = await fetch(url);
+  }
+
   if (!res.ok) throw new Error('Products request failed');
 
   return res.json();

@@ -78,10 +78,7 @@ export function ProductModal({ open, mode, product, onClose, onSubmit }: Props) 
             <InputNumber className={styles.fullWidth} min={0} placeholder="0" controls={false} />
           </Form.Item>
 
-          <Form.Item
-            label="Вендор"
-            name="brand"
-          >
+          <Form.Item label="Вендор" name="brand">
             <Input placeholder="Введите вендора" />
           </Form.Item>
         </div>
