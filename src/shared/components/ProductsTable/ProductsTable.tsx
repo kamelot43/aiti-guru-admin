@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import type { Key } from 'react';
 
 import styles from './ProductsTable.module.scss';
-import type {ProductRow} from "../../../pages/products/products.mock";
+import type { ProductRow } from '../../../pages/products/products.mock';
 
 type SortState = {
   field?: keyof ProductRow;
