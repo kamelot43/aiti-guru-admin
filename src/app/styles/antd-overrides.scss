@@ -51,3 +51,48 @@
     align-items: center;
   }
 }
+
+:where(.ant-form-vertical) .ant-form-item-label > label {
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+  font-size: 16px;
+}
+
+/* Inputs */
+:where(.ant-input),
+:where(.ant-input-affix-wrapper) {
+  border-radius: var(--radius-lg);
+  border-color: var(--color-border);
+}
+
+:where(.ant-input-affix-wrapper:hover) {
+  border-color: var(--gray-300);
+}
+
+:where(.ant-input-affix-wrapper-focused) {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-bg);
+}
+
+/* Checkbox */
+:where(.ant-checkbox-inner) {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border-color: var(--gray-300);
+}
+
+:where(.ant-checkbox-checked) .ant-checkbox-inner {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* Divider */
+:where(.ant-divider) {
+  border-color: var(--color-border) !important;
+}
+
+:where(.ant-divider) .ant-divider-inner-text {
+  color: var(--gray-300);
+  font-weight: var(--fw-medium);
+}
