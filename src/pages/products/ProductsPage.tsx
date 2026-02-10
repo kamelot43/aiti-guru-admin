@@ -141,20 +141,25 @@ export function ProductsPage() {
       align: "right",
       render: (_: unknown, row: ProductRow) => (
           <div className={styles.rowActions}>
-            <button className={styles.addToCartBtn} type="button" aria-label="Добавить в корзину">
-              <PlusOutlined />
-            </button>
-            <button
+            <Button
+                type="primary"
+                shape="round"
+                icon={<PlusOutlined />}
+                className={styles.addToCartBtn}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+            />
+            <Button
+                type="default"
+                shape="circle"
+                icon={<MoreOutlined />}
                 className={styles.moreBtn}
-                type="button"
-                aria-label="Меню"
                 onClick={(e) => {
                   e.stopPropagation();
                   openEdit(row);
                 }}
-            >
-              <MoreOutlined />
-            </button>
+            />
           </div>
       ),
     },
@@ -269,11 +274,10 @@ export function ProductsPage() {
             </Typography.Title>
 
             <div className={styles.headerActions}>
-              <Button icon={<ReloadOutlined />} className={styles.refreshBtn} />
+              <Button icon={<ReloadOutlined />}/>
               <Button
                   type="primary"
                   icon={<PlusOutlined />}
-                  className={styles.addBtn}
                   onClick={openCreate}
               >
                 Добавить
@@ -314,17 +318,17 @@ export function ProductsPage() {
                 onChange={(p) => setPage(p)}
                 showSizeChanger={false}
             />
-            <ProductModal
-                open={isProductModalOpen}
-                mode={productModalMode}
-                product={editingProduct}
-                onClose={closeModal}
-                onSubmit={(values: ProductFormValues) => {
-                  console.log(productModalMode, editingProduct?.id, values);
-                  closeModal();
-                }}
-            />
           </div>
+          <ProductModal
+              open={isProductModalOpen}
+              mode={productModalMode}
+              product={editingProduct}
+              onClose={closeModal}
+              onSubmit={(values: ProductFormValues) => {
+                console.log(productModalMode, editingProduct?.id, values);
+                closeModal();
+              }}
+          />
         </div>
       </div>
   );

@@ -1,0 +1,53 @@
+:where(.ant-app),
+:where(.ant-typography),
+:where(.ant-btn),
+:where(.ant-input),
+:where(.ant-input-affix-wrapper),
+:where(.ant-table),
+:where(.ant-table-wrapper),
+:where(.ant-modal),
+:where(.ant-form),
+:where(.ant-pagination) {
+  font-family: var(--font-body);
+}
+
+/* Headings inside Ant Typography -> Intel */
+:where(.ant-typography) h1,
+:where(.ant-typography) h2,
+:where(.ant-typography) h3,
+:where(.ant-typography) h4,
+:where(.ant-typography) h5,
+:where(.ant-typography) h6 {
+  font-family: var(--font-heading);
+}
+
+:where(.ant-table-wrapper) {
+  .ant-table-tbody > tr.ant-table-row-selected > td,
+  .ant-table-tbody > tr.ant-table-row-selected:hover > td {
+    background: transparent !important;
+  }
+
+  .ant-table-thead > tr > th {
+    color: var(--gray-500);
+    font-weight: var(--fw-semibold);
+  }
+
+  .ant-table-tbody > tr > td {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  th.ant-table-selection-column,
+  td.ant-table-selection-column {
+    width: 44px;
+    padding: 0 !important;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .ant-table-selection-column .ant-table-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
