@@ -1,8 +1,11 @@
-import { Button, Checkbox, Divider, Form, Input } from 'antd';
+import { Button, Checkbox, Divider, Form, Input, message } from 'antd';
 import { LockOutlined, UserOutlined, EyeInvisibleOutlined, CloseOutlined } from '@ant-design/icons';
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import cn from 'classnames';
 import styles from './LoginForm.module.scss';
+import { loginApi } from "../../api/auth";
+import { useAuth } from "../../../app/providers/AuthProvider";
 
 export type LoginFormValues = {
   username: string;
@@ -19,14 +22,50 @@ type Props = {
 export function LoginForm({ initialValues, onSubmit, onCreateAccountClick }: Props) {
   const [form] = Form.useForm<LoginFormValues>();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  const onFinish = async (values: LoginFormValues) => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    form.setFields([
+      { name: "username", errors: [] },
+      { name: "password", errors: [] },
+    ]);
+
+    try {
+      const res = await loginApi({
+        username: values.username,
+        password: values.password,
+        expiresInMins: 60,
+      });
+
+      auth.setSession(res.accessToken, values.remember ? "persist" : "session");
+      message.success("Успешный вход");
+      navigate("/products", { replace: true });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Ошибка авторизации";
+      form.setFields([
+        { name: "username", errors: [] },
+        { name: "password", errors: [msg] },
+      ]);
+
+      message.error(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <Form<LoginFormValues>
       form={form}
       layout="vertical"
       requiredMark={false}
-      initialValues={{ username: '', password: '', remember: false, ...initialValues }}
-      onFinish={(values) => onSubmit?.(values)}
+      initialValues={{ username: "", password: "", remember: false }}
+      onFinish={onFinish}
+      disabled={isSubmitting}
     >
       <Form.Item
         label="Логин"
@@ -76,7 +115,7 @@ export function LoginForm({ initialValues, onSubmit, onCreateAccountClick }: Pro
         <Checkbox>Запомнить данные</Checkbox>
       </Form.Item>
 
-      <Button type="primary" htmlType="submit" size="large" block>
+      <Button type="primary" htmlType="submit" size="large" block loading={isSubmitting}>
         Войти
       </Button>
 

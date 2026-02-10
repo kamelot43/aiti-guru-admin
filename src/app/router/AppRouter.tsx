@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { LoginPage } from '@/pages/login/LoginPage';
 import { ProductsPage } from '@/pages/products/ProductsPage';
-import { RequireAuth } from '../../features/auth/ui/RequireAuth';
+import {RequireAuth} from "../../shared/auth/RequireAuth";
 
 export function AppRouter() {
   return (
@@ -17,7 +17,7 @@ export function AppRouter() {
         }
       />
 
-      <Route path="*" element={<div className="p-6">Not found</div>} />
+      <Route path="*" element={<Navigate to="/products" replace />} />
     </Routes>
   );
 }
