@@ -6,7 +6,7 @@ import type { Key } from 'react';
 
 import styles from './ProductsPage.module.scss';
 import type { Product } from '../../shared/api/productsApi';
-import { fetchProducts } from '../../shared/api/productsApi';
+import { fetchProducts, addProductApi, updateProductApi } from '../../shared/api/productsApi';
 import {
   ProductModal,
   type ProductFormValues,
@@ -132,9 +132,28 @@ export function ProductsPage() {
           mode={productModalMode}
           product={editingProduct}
           onClose={closeModal}
-          onSubmit={(values: ProductFormValues) => {
-            console.log(productModalMode, editingProduct?.id, values);
-            closeModal();
+          onSubmit={async (values: ProductFormValues) => {
+            try {
+              if (productModalMode === 'create') {
+                const created = await addProductApi(values);
+
+                setRows((prev) => [created, ...prev]);
+
+                message.success('Товар добавлен');
+              } else if (editingProduct) {
+                const updated = await updateProductApi(editingProduct.id, values);
+
+                setRows((prev) =>
+                  prev.map((p) => (p.id === editingProduct.id ? { ...p, ...updated } : p)),
+                );
+
+                message.success('Товар обновлён');
+              }
+
+              closeModal();
+            } catch {
+              message.error('Ошибка операции');
+            }
           }}
         />
       </div>

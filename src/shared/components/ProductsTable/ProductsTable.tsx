@@ -3,6 +3,7 @@ import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import type { TableRowSelection } from 'antd/es/table/interface';
 import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import type { Key } from 'react';
+import { message } from 'antd';
 
 import styles from './ProductsTable.module.scss';
 import type { ProductRow } from '../../../pages/products/products.mock';
@@ -47,12 +48,10 @@ export function ProductsTable({
   onSortChange,
   onEdit,
 }: Props) {
-
   const from = total === 0 ? 0 : (page - 1) * pageSize + 1;
   const to = Math.min(page * pageSize, total);
 
-  const allCheckedOnPage =
-      rows.length > 0 && rows.every((r) => selectedRowKeys.includes(r.id));
+  const allCheckedOnPage = rows.length > 0 && rows.every((r) => selectedRowKeys.includes(r.id));
 
   const toggleSelectAllOnPage = () => {
     onSelectedRowKeysChange(
@@ -80,7 +79,9 @@ export function ProductsTable({
       sorter: true,
       render: (_, row) => (
         <div className={styles.nameCell}>
-          <div className={styles.thumb} />
+          <div className={styles.thumb}>
+            {row.thumbnail && <img src={row.thumbnail} alt={row.title} loading="lazy" />}
+          </div>
           <div className={styles.nameText}>
             <div className={styles.nameTitle}>{row.title}</div>
             <div className={styles.nameSub}>{row.category}</div>
@@ -102,8 +103,9 @@ export function ProductsTable({
       key: 'rating',
       sorter: true,
       render: (rating: number) => {
-        const cls = rating < 3 ? styles.ratingBad : styles.ratingOk;
-        return <span className={cls}>{rating.toFixed(1)}/5</span>;
+          const safe = typeof rating === "number" ? rating : 0;
+          const cls = safe < 3 ? styles.ratingBad : styles.ratingOk;
+          return <span className={cls}>{safe.toFixed(1)}/5</span>;
       },
     },
     {
@@ -112,7 +114,10 @@ export function ProductsTable({
       key: 'price',
       align: 'right',
       sorter: true,
-      render: (price: number) => <span className={styles.price}>{formatPriceRub(price)}</span>,
+      render: (price: number) => {
+          const safe = typeof price === "number" ? price : 0;
+          return <span className={styles.price}>{formatPriceRub(safe)}</span>;
+      },
     },
     {
       title: '',
@@ -126,7 +131,10 @@ export function ProductsTable({
             shape="round"
             icon={<PlusOutlined />}
             className={styles.addToCartBtn}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              message.success('Товар добавлен в корзину');
+            }}
           />
           <Button
             type="default"

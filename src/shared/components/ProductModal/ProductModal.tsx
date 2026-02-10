@@ -81,7 +81,6 @@ export function ProductModal({ open, mode, product, onClose, onSubmit }: Props) 
           <Form.Item
             label="Вендор"
             name="brand"
-            rules={[{ required: true, message: 'Введите вендора' }]}
           >
             <Input placeholder="Введите вендора" />
           </Form.Item>
