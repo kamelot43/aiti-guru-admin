@@ -1,10 +1,12 @@
 import { Button, Input, Typography } from 'antd';
 import { PlusOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
-import { useMemo, useState } from 'react';
+import { message } from 'antd';
+import { useEffect, useMemo, useState } from 'react';
 import type { Key } from 'react';
 
 import styles from './ProductsPage.module.scss';
-import { productsMock, type ProductRow } from './products.mock';
+import type { Product } from '../../shared/api/productsApi';
+import { fetchProducts } from '../../shared/api/productsApi';
 import {
   ProductModal,
   type ProductFormValues,
@@ -12,7 +14,7 @@ import {
 import { ProductsTable } from '../../shared/components/ProductsTable/ProductsTable';
 
 type SortState = {
-  field?: keyof ProductRow;
+  field?: keyof Product;
   order?: 'ascend' | 'descend';
 };
 
@@ -24,7 +26,11 @@ export function ProductsPage() {
 
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [productModalMode, setProductModalMode] = useState<'create' | 'edit'>('create');
-  const [editingProduct, setEditingProduct] = useState<ProductRow | null>(null);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
+  const [rows, setRows] = useState<Product[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const pageSize = 20;
 
@@ -34,7 +40,7 @@ export function ProductsPage() {
     setIsProductModalOpen(true);
   };
 
-  const openEdit = (p: ProductRow) => {
+  const openEdit = (p: Product) => {
     setProductModalMode('edit');
     setEditingProduct(p);
     setIsProductModalOpen(true);
@@ -42,33 +48,33 @@ export function ProductsPage() {
 
   const closeModal = () => setIsProductModalOpen(false);
 
-  const data = useMemo(() => {
-    const q = search.trim().toLowerCase();
+  const skip = useMemo(() => (page - 1) * pageSize, [page, pageSize]);
+  const sortBy = sort.field ? String(sort.field) : undefined;
+  const order = sort.order ? (sort.order === 'ascend' ? 'asc' : 'desc') : undefined;
 
-    let filtered = productsMock;
-    if (q) {
-      filtered = productsMock.filter((p) => {
-        return (
-          p.title.toLowerCase().includes(q) ||
-          p.brand.toLowerCase().includes(q) ||
-          p.sku.toLowerCase().includes(q)
-        );
+  const load = async () => {
+    setLoading(true);
+    try {
+      const res = await fetchProducts({
+        limit: pageSize,
+        skip,
+        search: search.trim() ? search.trim() : undefined,
+        sortBy,
+        order,
       });
+
+      setRows(res.products);
+      setTotal(res.total);
+    } catch (e) {
+      message.error('Не удалось загрузить товары');
+    } finally {
+      setLoading(false);
     }
+  };
 
-    if (sort.field && sort.order) {
-      const dir = sort.order === 'ascend' ? 1 : -1;
-      filtered = [...filtered].sort((a, b) => {
-        const av = a[sort.field!];
-        const bv = b[sort.field!];
-
-        if (typeof av === 'number' && typeof bv === 'number') return (av - bv) * dir;
-        return String(av).localeCompare(String(bv), 'ru') * dir;
-      });
-    }
-
-    return filtered;
-  }, [search, sort]);
+  useEffect(() => {
+    void load();
+  }, [page, pageSize, skip, sortBy, order, search]);
 
   return (
     <div className={styles.page}>
@@ -87,6 +93,7 @@ export function ProductsPage() {
           prefix={<SearchOutlined />}
           placeholder="Найти"
           className={styles.search}
+          disabled={loading}
         />
       </div>
 
@@ -97,7 +104,7 @@ export function ProductsPage() {
           </Typography.Title>
 
           <div className={styles.headerActions}>
-            <Button icon={<ReloadOutlined />} />
+            <Button icon={<ReloadOutlined />} onClick={load} loading={loading} disabled={loading} />
             <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>
               Добавить
             </Button>
@@ -105,13 +112,18 @@ export function ProductsPage() {
         </div>
 
         <ProductsTable
-          data={data}
+          rows={rows}
+          total={total}
           page={page}
           pageSize={pageSize}
+          loading={loading}
           selectedRowKeys={selectedRowKeys}
           onSelectedRowKeysChange={setSelectedRowKeys}
           onPageChange={setPage}
-          onSortChange={setSort}
+          onSortChange={(nextSort) => {
+            setSort(nextSort);
+            setPage(1);
+          }}
           onEdit={openEdit}
         />
 

@@ -1,11 +1,11 @@
 import { Button, Checkbox, Divider, Form, Input, message } from 'antd';
 import { LockOutlined, UserOutlined, EyeInvisibleOutlined, CloseOutlined } from '@ant-design/icons';
 import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 import styles from './LoginForm.module.scss';
-import { loginApi } from "../../api/auth";
-import { useAuth } from "../../../app/providers/AuthProvider";
+import { loginApi } from '../../api/auth';
+import { useAuth } from '../../../app/providers/AuthProvider';
 
 export type LoginFormValues = {
   username: string;
@@ -31,8 +31,8 @@ export function LoginForm({ initialValues, onSubmit, onCreateAccountClick }: Pro
 
     setIsSubmitting(true);
     form.setFields([
-      { name: "username", errors: [] },
-      { name: "password", errors: [] },
+      { name: 'username', errors: [] },
+      { name: 'password', errors: [] },
     ]);
 
     try {
@@ -42,14 +42,14 @@ export function LoginForm({ initialValues, onSubmit, onCreateAccountClick }: Pro
         expiresInMins: 60,
       });
 
-      auth.setSession(res.accessToken, values.remember ? "persist" : "session");
-      message.success("Успешный вход");
-      navigate("/products", { replace: true });
+      auth.setSession(res.accessToken, values.remember ? 'persist' : 'session');
+      message.success('Успешный вход');
+      navigate('/products', { replace: true });
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "Ошибка авторизации";
+      const msg = e instanceof Error ? e.message : 'Ошибка авторизации';
       form.setFields([
-        { name: "username", errors: [] },
-        { name: "password", errors: [msg] },
+        { name: 'username', errors: [] },
+        { name: 'password', errors: [msg] },
       ]);
 
       message.error(msg);
@@ -63,7 +63,7 @@ export function LoginForm({ initialValues, onSubmit, onCreateAccountClick }: Pro
       form={form}
       layout="vertical"
       requiredMark={false}
-      initialValues={{ username: "", password: "", remember: false }}
+      initialValues={{ username: '', password: '', remember: false }}
       onFinish={onFinish}
       disabled={isSubmitting}
     >

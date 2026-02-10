@@ -2,7 +2,6 @@ import { Button, Pagination, Table } from 'antd';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import type { TableRowSelection } from 'antd/es/table/interface';
 import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
-import { useMemo } from 'react';
 import type { Key } from 'react';
 
 import styles from './ProductsTable.module.scss';
@@ -14,9 +13,11 @@ type SortState = {
 };
 
 type Props = {
-  data: ProductRow[];
+  rows: ProductRow[];
+  total: number;
   page: number;
   pageSize: number;
+  loading?: boolean;
 
   selectedRowKeys: Key[];
   onSelectedRowKeysChange: (keys: Key[]) => void;
@@ -35,32 +36,28 @@ function formatPriceRub(value: number) {
 }
 
 export function ProductsTable({
-  data,
+  rows,
+  total,
   page,
   pageSize,
+  loading = false,
   selectedRowKeys,
   onSelectedRowKeysChange,
   onPageChange,
   onSortChange,
   onEdit,
 }: Props) {
-  const total = data.length;
 
   const from = total === 0 ? 0 : (page - 1) * pageSize + 1;
   const to = Math.min(page * pageSize, total);
 
-  const pageData = useMemo(() => {
-    const start = (page - 1) * pageSize;
-    return data.slice(start, start + pageSize);
-  }, [data, page, pageSize]);
-
   const allCheckedOnPage =
-    pageData.length > 0 && pageData.every((r) => selectedRowKeys.includes(r.id));
+      rows.length > 0 && rows.every((r) => selectedRowKeys.includes(r.id));
 
   const toggleSelectAllOnPage = () => {
     onSelectedRowKeysChange(
       (() => {
-        const pageIds = pageData.map((r) => r.id);
+        const pageIds = rows.map((r) => r.id);
         const allSelected =
           pageIds.length > 0 && pageIds.every((id) => selectedRowKeys.includes(id));
 
@@ -202,6 +199,7 @@ export function ProductsTable({
     <div className={styles.wrap}>
       <Table<ProductRow>
         rowKey="id"
+        loading={loading}
         onRow={(record) => ({
           onClick: () => {
             onSelectedRowKeysChange(
@@ -214,7 +212,7 @@ export function ProductsTable({
             );
           },
         })}
-        dataSource={pageData}
+        dataSource={rows}
         columns={columns}
         pagination={false}
         onChange={onChangeTable}
@@ -234,6 +232,7 @@ export function ProductsTable({
           total={total}
           onChange={onPageChange}
           showSizeChanger={false}
+          disabled={loading}
         />
       </div>
     </div>
