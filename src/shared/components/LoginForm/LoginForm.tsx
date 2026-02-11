@@ -1,8 +1,7 @@
 import { Button, Checkbox, Divider, Form, Input, message } from 'antd';
-import { LockOutlined, UserOutlined, EyeInvisibleOutlined, CloseOutlined } from '@ant-design/icons';
+import { LockOutlined, UserOutlined, EyeInvisibleOutlined, EyeOutlined, CloseOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import cn from 'classnames';
 import styles from './LoginForm.module.scss';
 import { loginApi } from '../../api/auth';
 import { useAuth } from '../../../app/providers/AuthProvider';
@@ -105,7 +104,7 @@ export function LoginForm({ initialValues, onSubmit, onCreateAccountClick }: Pro
               onClick={() => setIsPasswordVisible((v) => !v)}
               aria-label="Показать/скрыть пароль"
             >
-              <EyeInvisibleOutlined />
+              {isPasswordVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
             </button>
           }
         />
@@ -125,7 +124,7 @@ export function LoginForm({ initialValues, onSubmit, onCreateAccountClick }: Pro
 
       <div className={styles.bottom}>
         <span className={styles.bottomText}>Нет аккаунта?</span>
-        <button type="button" className={cn(styles.link)} onClick={() => onCreateAccountClick?.()}>
+        <button type="button" className={styles.link} onClick={() => onCreateAccountClick?.()}>
           Создать
         </button>
       </div>

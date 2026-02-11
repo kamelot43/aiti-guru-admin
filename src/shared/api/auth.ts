@@ -36,7 +36,12 @@ export async function loginApi(body: LoginRequest): Promise<LoginResponse> {
     body: JSON.stringify(body),
   });
 
-  const data = await res.json().catch(() => null);
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    data = null;
+  }
 
   if (!res.ok) {
     const message = data?.message || 'Ошибка авторизации';
@@ -55,7 +60,12 @@ export async function authMeApi(accessToken: string): Promise<AuthMeResponse> {
     credentials: 'include',
   });
 
-  const data = await res.json().catch(() => null);
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    data = null;
+  }
 
   if (!res.ok) {
     const message = data?.message || 'Не удалось получить пользователя';

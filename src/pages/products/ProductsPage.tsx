@@ -1,19 +1,32 @@
-import debounce from 'lodash.debounce';
-import { Button, Input, Typography } from 'antd';
-import { PlusOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
-import { message } from 'antd';
-import { useEffect, useMemo, useState, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+// react
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Key } from 'react';
 
-import styles from './ProductsPage.module.scss';
+// libs
+import debounce from 'lodash.debounce';
+
+// router
+import { useSearchParams } from 'react-router-dom';
+
+// antd
+import { Button, Input, Typography, message } from 'antd';
+import { PlusOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+
+// hooks
+import { useProductsHydrateFromUrl } from '../../shared/hooks/useProductsHydrateFromUrl';
+import { useProductsSyncUrl } from '../../shared/hooks/useProductsSyncUrl';
+
+// api
 import type { Product } from '../../shared/api/productsApi';
-import { fetchProducts, addProductApi, updateProductApi } from '../../shared/api/productsApi';
-import {
-  ProductModal,
-  type ProductFormValues,
-} from '../../shared/components/ProductModal/ProductModal';
+import { addProductApi, fetchProducts, updateProductApi } from '../../shared/api/productsApi';
+
+// components
+import { ProductModal, type ProductFormValues } from '../../shared/components/ProductModal/ProductModal';
 import { ProductsTable } from '../../shared/components/ProductsTable/ProductsTable';
+
+// styles
+import styles from './ProductsPage.module.scss';
+
 
 type SortState = {
   field?: keyof Product;
@@ -46,7 +59,32 @@ export function ProductsPage() {
       }, 1000),
     [],
   );
+  const handleProductSubmit = useCallback(
+      async (values: ProductFormValues) => {
+        try {
+          if (productModalMode === 'create') {
+            const created = await addProductApi(values);
 
+            setRows((prev) => [created, ...prev]);
+
+            message.success('Товар добавлен');
+          } else if (editingProduct) {
+            const updated = await updateProductApi(editingProduct.id, values);
+
+            setRows((prev) =>
+                prev.map((p) => (p.id === editingProduct.id ? { ...p, ...updated } : p)),
+            );
+
+            message.success('Товар обновлён');
+          }
+
+          closeModal();
+        } catch {
+          message.error('Ошибка операции');
+        }
+      },
+      [productModalMode, editingProduct],
+  );
   const pageSize = 20;
 
   const openCreate = () => {
@@ -67,10 +105,18 @@ export function ProductsPage() {
   const sortBy = sort.field ? String(sort.field) : undefined;
   const order = sort.order ? (sort.order === 'ascend' ? 'asc' : 'desc') : undefined;
 
-  const load = async () => {
+  const startRequest = () => {
     abortRef.current?.abort();
     const controller = new AbortController();
     abortRef.current = controller;
+    return controller;
+  };
+
+  const isAbortError = (e: unknown) =>
+      e instanceof DOMException && e.name === 'AbortError';
+
+  const load = async () => {
+    const controller = startRequest();
 
     setLoading(true);
     try {
@@ -86,7 +132,7 @@ export function ProductsPage() {
       setRows(res.products);
       setTotal(res.total);
     } catch (e) {
-      if (e instanceof DOMException && e.name === 'AbortError') return;
+      if (isAbortError(e)) return;
       message.error('Не удалось загрузить товары');
     } finally {
       if (abortRef.current === controller) setLoading(false);
@@ -109,48 +155,22 @@ export function ProductsPage() {
     };
   }, [debouncedSetSearchQuery]);
 
-  useEffect(() => {
-    const q = searchParams.get('q') ?? '';
-    const pageFromUrl = Number(searchParams.get('page') ?? '1');
-    const sortBy = searchParams.get('sortBy') ?? undefined;
-    const order = searchParams.get('order') as 'asc' | 'desc' | null;
+  useProductsHydrateFromUrl({
+    searchParams,
+    setSearchInput,
+    setSearchQuery,
+    setPage,
+    setSort,
+    setHydrated,
+  });
 
-    setSearchInput(q);
-    setSearchQuery(q);
-    setPage(Number.isFinite(pageFromUrl) && pageFromUrl > 0 ? pageFromUrl : 1);
-
-    if (sortBy && (order === 'asc' || order === 'desc')) {
-      setSort({
-        field: sortBy as keyof Product,
-        order: order === 'asc' ? 'ascend' : 'descend',
-      });
-    } else {
-      setSort({});
-    }
-
-    setHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    const next = new URLSearchParams(searchParams);
-
-    const q = searchQuery.trim();
-    if (q) next.set('q', q);
-    else next.delete('q');
-
-    if (page > 1) next.set('page', String(page));
-    else next.delete('page');
-
-    if (sort.field && sort.order) {
-      next.set('sortBy', String(sort.field));
-      next.set('order', sort.order === 'ascend' ? 'asc' : 'desc');
-    } else {
-      next.delete('sortBy');
-      next.delete('order');
-    }
-
-    setSearchParams(next, { replace: true });
-  }, [searchQuery, page, sort]);
+  useProductsSyncUrl({
+    searchParams,
+    setSearchParams,
+    searchQuery,
+    page,
+    sort,
+  });
 
   return (
     <div className={styles.page}>
@@ -210,29 +230,7 @@ export function ProductsPage() {
           mode={productModalMode}
           product={editingProduct}
           onClose={closeModal}
-          onSubmit={async (values: ProductFormValues) => {
-            try {
-              if (productModalMode === 'create') {
-                const created = await addProductApi(values);
-
-                setRows((prev) => [created, ...prev]);
-
-                message.success('Товар добавлен');
-              } else if (editingProduct) {
-                const updated = await updateProductApi(editingProduct.id, values);
-
-                setRows((prev) =>
-                  prev.map((p) => (p.id === editingProduct.id ? { ...p, ...updated } : p)),
-                );
-
-                message.success('Товар обновлён');
-              }
-
-              closeModal();
-            } catch {
-              message.error('Ошибка операции');
-            }
-          }}
+          onSubmit={handleProductSubmit}
         />
       </div>
     </div>
