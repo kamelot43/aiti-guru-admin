@@ -1,5 +1,21 @@
 /* Fonts */
 @font-face {
+  font-family: 'Cairo';
+  src: url('../../assets/fonts/Cairo-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  src: url('../../assets/fonts/Cairo-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'Intel';
   src: url('../../assets/fonts/Intel-Regular.woff2') format('woff2');
   font-weight: 400;
@@ -60,6 +76,7 @@
     'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
     sans-serif;
   --font-intel: 'Intel', 'Open Sans', sans-serif;
+  --font-cairo: 'Cairo', 'Open Sans', sans-serif;
 
   /* colors (base) */
   --color-bg: #ffffff;
@@ -88,7 +105,7 @@
   --gray-50: #f8fafc;
   --gray-100: #F9F9F9;
   --gray-200: #e2e8f0;
-  --gray-300: #cbd5e1;
+  --gray-300: #B2B3B9;
   --gray-400: #94a3b8;
   --gray-500: #64748b;
   --gray-600: #475569;
@@ -144,7 +161,7 @@ body {
 
 body {
   margin: 0;
-  background: var(--color-bg);
+  background: var(--gray-100);
   color: var(--color-text);
   font-family: var(--font-open-sans);
   font-size: var(--text-p-size);

@@ -15,7 +15,7 @@ export const antdTheme: ThemeConfig = {
     Button: {
       controlHeight: 44,
       controlHeightLG: 54,
-      controlHeightSM: 36,
+      controlHeightSM: 27,
 
       paddingInline: 20,
       paddingInlineLG: 16,

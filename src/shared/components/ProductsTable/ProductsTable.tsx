@@ -129,6 +129,7 @@ export function ProductsTable({
           <Button
             type="primary"
             shape="round"
+            size="small"
             icon={<PlusOutlined />}
             className={styles.addToCartBtn}
             onClick={(e) => {
@@ -139,6 +140,7 @@ export function ProductsTable({
           <Button
             type="default"
             shape="circle"
+            size="small"
             icon={<MoreOutlined />}
             className={styles.moreBtn}
             onClick={(e) => {
