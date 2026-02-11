@@ -132,7 +132,6 @@ export function ProductsTable({
           },
         })}
         dataSource={rows}
-        sort={sort}
         columns={columns}
         pagination={false}
         onChange={onChangeTable}
