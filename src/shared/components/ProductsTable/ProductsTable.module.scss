@@ -91,7 +91,7 @@
 .nameSub {
   font-family: var(--font-cairo);
   color: var(--gray-300);
-  font-size: 14px;
+  font-size: var(--text-p-small-size);
 }
 
 .vendor {
@@ -127,7 +127,7 @@
 .priceFraction {
   font-family: var(--font-roboto);
   font-size: var(--text-p-size);
-  color: #999;
+  color: var(--gray-800);
 }
 
 /* Actions */

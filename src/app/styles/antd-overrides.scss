@@ -37,9 +37,9 @@
   .ant-table-thead > tr > th {
     font-family: var(--font-cairo);
     color: #b2b3b9 !important;
-    font-size: 16px;
+    font-size: var(--text-p-size);
     font-style: normal;
-    font-weight: 700 !important;
+    font-weight: var(--fw-bold) !important;
   }
 
   .ant-table-tbody > tr > td {
@@ -78,7 +78,7 @@
   border-radius: var(--radius-md);
   border-color: var(--color-border);
   font-size: 18px;
-  font-weight: 500;
+  font-weight: var(-fw-medium);
 }
 
 :where(.ant-input-affix-wrapper) {
@@ -86,7 +86,7 @@
 }
 
 :where(.ant-form-item) {
-  margin-bottom: 16px !important;
+  margin-bottom: var(--text-p-size) !important;
 }
 
 :where(.ant-input-affix-wrapper:hover) {
@@ -116,9 +116,9 @@
 }
 
 :where(.ant-checkbox-label) {
-  font-size: 16px;
+  font-size: var(--text-p-size);
   font-style: normal;
-  font-weight: 500;
+  font-weight: var(--fw-medium);
   color: #9c9c9c;
 }
 

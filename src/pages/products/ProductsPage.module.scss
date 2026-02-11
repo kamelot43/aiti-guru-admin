@@ -28,10 +28,10 @@
   background-color: var(--gray-100);
 
   :where(.ant-input) {
-    font-size: 14px;
+    font-size: var(--text-p-small-size);
+    line-height: var(--text-p-small-lh);
     font-style: normal;
-    font-weight: 400;
-    line-height: 24px;
+    font-weight: var(--fw-regular);
   }
 }
 
