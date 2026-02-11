@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Product } from '../api/productsApi';
+import type { Product } from '../api/productsApi';
 
 type SortState = {
   field?: keyof Product;

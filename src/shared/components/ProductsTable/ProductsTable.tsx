@@ -27,6 +27,7 @@ type Props = {
   page: number;
   pageSize: number;
   loading?: boolean;
+  sort: SortState;
 
   selectedRowKeys: Key[];
   onSelectedRowKeysChange: (keys: Key[]) => void;
@@ -43,6 +44,7 @@ export function ProductsTable({
   page,
   pageSize,
   loading = false,
+  sort: _sort,
   selectedRowKeys,
   onSelectedRowKeysChange,
   onPageChange,

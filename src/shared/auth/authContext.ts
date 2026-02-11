@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { PersistMode } from '../api/tokenStorage';
+import type { PersistMode } from '../api/tokenStorage';
 
 export type AuthState = {
   status: 'checking' | 'guest' | 'auth';

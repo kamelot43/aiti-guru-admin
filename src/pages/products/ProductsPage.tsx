@@ -204,12 +204,12 @@ export function ProductsPage() {
           <div className={styles.headerActions}>
             <Button
               icon={<ReloadOutlined />}
-              size="medium"
+              size="middle"
               onClick={load}
               loading={loading}
               disabled={loading}
             />
-            <Button type="primary" icon={<PlusOutlined />} size="medium" onClick={openCreate}>
+            <Button type="primary" icon={<PlusOutlined />} size="middle" onClick={openCreate}>
               Добавить
             </Button>
           </div>

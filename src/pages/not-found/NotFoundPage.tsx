@@ -12,12 +12,12 @@ export function NotFoundPage() {
 
         <div className={styles.actions}>
           <Link to="/products">
-            <Button type="primary" size="medium">
+            <Button type="primary" size="middle">
               На главную
             </Button>
           </Link>
 
-          <Button size="medium" onClick={() => window.history.back()}>
+          <Button size="middle" onClick={() => window.history.back()}>
             Назад
           </Button>
         </div>

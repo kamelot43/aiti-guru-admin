@@ -20,14 +20,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   useEffect(() => {
-    if (!state.token) return;
+    const token = state.token;
+    if (!token) return;
 
     (async () => {
       try {
-        const me = await authMeApi(state.token);
+        const me = await authMeApi(token);
         setState({
           status: 'auth',
-          token: state.token,
+          token: token,
           user: {
             id: me.id,
             username: me.username,
