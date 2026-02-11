@@ -7,18 +7,25 @@ import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import type { Product } from '../../api/productsApi';
 import formatPriceParts from '../../lib/formatPriceParts';
 
+type SortState = {
+  field?: keyof Product;
+  order?: 'ascend' | 'descend';
+};
+
 type CreateColumnsArgs = {
   styles: Record<string, string>;
   onEdit: (product: Product) => void;
+  sort: SortState;
 };
 
-export function createProductsColumns({ styles, onEdit }: CreateColumnsArgs): ColumnsType<Product> {
+export function createProductsColumns({ styles, onEdit, sort }: CreateColumnsArgs): ColumnsType<Product> {
   return [
     {
       title: 'Наименование',
       dataIndex: 'title',
       key: 'title',
       sorter: true,
+      sortOrder: sort.field === 'title' ? sort.order : null,
       render: (_: unknown, row: Product) => (
         <div className={styles.nameCell}>
           <div className={styles.thumb}>
@@ -36,6 +43,7 @@ export function createProductsColumns({ styles, onEdit }: CreateColumnsArgs): Co
       dataIndex: 'brand',
       key: 'brand',
       sorter: true,
+      sortOrder: sort.field === 'brand' ? sort.order : null,
       render: (v: string) => <span className={styles.vendor}>{v}</span>,
     },
     {
@@ -43,6 +51,7 @@ export function createProductsColumns({ styles, onEdit }: CreateColumnsArgs): Co
       dataIndex: 'sku',
       key: 'sku',
       sorter: true,
+      sortOrder: sort.field === 'sku' ? sort.order : null,
       render: (v: string) => <span className={styles.sku}>{v}</span>,
     },
     {
@@ -50,6 +59,7 @@ export function createProductsColumns({ styles, onEdit }: CreateColumnsArgs): Co
       dataIndex: 'rating',
       key: 'rating',
       sorter: true,
+      sortOrder: sort.field === 'rating' ? sort.order : null,
       render: (rating: number) => {
         const safe = typeof rating === 'number' ? rating : 0;
         const cls = safe < 3 ? styles.ratingBad : styles.ratingOk;
@@ -62,6 +72,7 @@ export function createProductsColumns({ styles, onEdit }: CreateColumnsArgs): Co
       key: 'price',
       align: 'right',
       sorter: true,
+      sortOrder: sort.field === 'price' ? sort.order : null,
       render: (price: number) => {
         const safe = typeof price === 'number' ? price : 0;
         const { rub, kop } = formatPriceParts(safe);

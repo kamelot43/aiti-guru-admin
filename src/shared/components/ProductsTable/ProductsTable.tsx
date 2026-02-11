@@ -44,7 +44,7 @@ export function ProductsTable({
   page,
   pageSize,
   loading = false,
-  sort: _sort,
+  sort,
   selectedRowKeys,
   onSelectedRowKeysChange,
   onPageChange,
@@ -74,7 +74,7 @@ export function ProductsTable({
     );
   }, [rows, selectedRowKeys, onSelectedRowKeysChange]);
 
-  const columns = useMemo(() => createProductsColumns({ styles, onEdit }), [onEdit]);
+  const columns = useMemo(() => createProductsColumns({ styles, onEdit, sort }), [onEdit, sort]);
 
   const rowSelection = useMemo(
     () =>
@@ -132,6 +132,7 @@ export function ProductsTable({
           },
         })}
         dataSource={rows}
+        sort={sort}
         columns={columns}
         pagination={false}
         onChange={onChangeTable}
