@@ -37,5 +37,6 @@ export function useProductsHydrateFromUrl(opts: {
     }
 
     setHydrated(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

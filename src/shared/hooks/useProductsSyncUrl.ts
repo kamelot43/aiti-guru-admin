@@ -35,5 +35,5 @@ export function useProductsSyncUrl(opts: {
     }
 
     setSearchParams(next, { replace: true });
-  }, [searchQuery, page, sort]);
+  }, [searchParams, setSearchParams, searchQuery, page, sort]);
 }

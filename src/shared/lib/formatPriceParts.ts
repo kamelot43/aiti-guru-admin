@@ -13,7 +13,7 @@ export default function formatPriceParts(value: number) {
   });
 
   return {
-    rub: rub.join('').replace(/[,\.]$/, ''),
+    rub: rub.join('').replace(/[,.]$/, ''),
     kop: kop.join(''),
   };
 }

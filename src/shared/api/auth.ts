@@ -1,4 +1,4 @@
-import {BASE_URL} from "./const";
+import { BASE_URL } from './const';
 
 export type LoginRequest = {
   username: string;

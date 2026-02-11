@@ -116,7 +116,7 @@ export function ProductsPage() {
 
   const isAbortError = (e: unknown) => e instanceof DOMException && e.name === 'AbortError';
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const controller = startRequest();
 
     setLoading(true);
@@ -138,13 +138,13 @@ export function ProductsPage() {
     } finally {
       if (abortRef.current === controller) setLoading(false);
     }
-  };
+  }, [pageSize, skip, searchQuery, sortBy, order]);
 
   useEffect(() => {
     if (!hydrated) return;
 
     void load();
-  }, [hydrated, page, pageSize, skip, sortBy, order, searchQuery]);
+  }, [hydrated, load]);
 
   useEffect(() => {
     return () => abortRef.current?.abort();

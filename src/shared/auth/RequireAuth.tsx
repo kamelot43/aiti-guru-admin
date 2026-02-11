@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../app/providers/AuthProvider';
+import { useAuth } from './useAuth';
 
 export function RequireAuth({ children }: { children: JSX.Element }) {
   const { status } = useAuth();

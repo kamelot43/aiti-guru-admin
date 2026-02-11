@@ -50,7 +50,7 @@ export function ProductModal({ open, mode, product, onClose, onSubmit }: Props) 
       open={open}
       onCancel={onClose}
       centered
-      destroyOnClose
+      destroyOnHidden
       title={mode === 'create' ? 'Добавление товара' : 'Редактирование товара'}
       className={styles.modal}
       footer={[

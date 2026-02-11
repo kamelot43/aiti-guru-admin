@@ -1,48 +1,33 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
+
 import { authMeApi } from '../../shared/api/auth';
-import { clearToken, readToken, saveToken, type PersistMode } from '../../shared/api/tokenStorage';
+import { clearToken, readToken, saveToken } from '../../shared/api/tokenStorage';
 
-type AuthState = {
-  status: 'checking' | 'guest' | 'auth';
-  token: string | null;
-  user: null | {
-    id: number;
-    username: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    image: string;
-  };
-};
-
-type AuthContextValue = AuthState & {
-  setSession: (token: string, mode: PersistMode) => void;
-  logout: () => void;
-};
-
-const AuthContext = createContext<AuthContextValue | null>(null);
+import {
+  AuthContext,
+  GUEST_STATE,
+  type AuthContextValue,
+  type AuthState,
+} from '../../shared/auth/authContext';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<AuthState>({
-    status: 'checking',
-    token: null,
-    user: null,
+  const [state, setState] = useState<AuthState>(() => {
+    const token = readToken();
+    if (!token) return GUEST_STATE;
+
+    return { status: 'checking', token, user: null };
   });
 
   useEffect(() => {
-    const token = readToken();
-    if (!token) {
-      setState({ status: 'guest', token: null, user: null });
-      return;
-    }
+    if (!state.token) return;
 
     (async () => {
       try {
-        const me = await authMeApi(token);
+        const me = await authMeApi(state.token);
         setState({
           status: 'auth',
-          token,
+          token: state.token,
           user: {
             id: me.id,
             username: me.username,
@@ -54,10 +39,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         });
       } catch {
         clearToken();
-        setState({ status: 'guest', token: null, user: null });
+        setState(GUEST_STATE);
       }
     })();
-  }, []);
+  }, [state.token]);
 
   const value = useMemo<AuthContextValue>(
     () => ({
@@ -68,17 +53,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
       logout: () => {
         clearToken();
-        setState({ status: 'guest', token: null, user: null });
+        setState(GUEST_STATE);
       },
     }),
     [state],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
-  return ctx;
 }

@@ -18,7 +18,7 @@ import {
 import { loginApi } from '../../api/auth';
 
 // hooks / providers
-import { useAuth } from '../../../app/providers/AuthProvider';
+import { useAuth } from '../../auth/useAuth';
 
 // styles
 import styles from './LoginForm.module.scss';
@@ -60,6 +60,7 @@ export function LoginForm({ initialValues, onSubmit, onCreateAccountClick }: Pro
 
       auth.setSession(res.accessToken, values.remember ? 'persist' : 'session');
       message.success('Успешный вход');
+      onSubmit?.(values);
       navigate('/products', { replace: true });
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Ошибка авторизации';
@@ -79,7 +80,7 @@ export function LoginForm({ initialValues, onSubmit, onCreateAccountClick }: Pro
       form={form}
       layout="vertical"
       requiredMark={false}
-      initialValues={{ username: '', password: '', remember: false }}
+      initialValues={{ username: '', password: '', remember: false, ...initialValues }}
       onFinish={onFinish}
       disabled={isSubmitting}
     >

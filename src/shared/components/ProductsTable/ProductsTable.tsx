@@ -1,10 +1,11 @@
 // react
 import type { Key } from 'react';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 // antd
-import { Pagination, Table} from 'antd';
+import { Pagination, Table } from 'antd';
 import type { TablePaginationConfig } from 'antd/es/table';
+import type { SorterResult } from 'antd/es/table/interface';
 
 // api / types
 import type { Product } from '../../api/productsApi';
@@ -53,23 +54,23 @@ export function ProductsTable({
 
   const allCheckedOnPage = rows.length > 0 && rows.every((r) => selectedRowKeys.includes(r.id));
 
-  const toggleSelectAllOnPage = () => {
+  const toggleSelectAllOnPage = useCallback(() => {
     onSelectedRowKeysChange(
       (() => {
-        const pageIds = rows.map((r) => r.id);
+        const pageIds: Key[] = rows.map((r) => r.id as Key);
         const allSelected =
           pageIds.length > 0 && pageIds.every((id) => selectedRowKeys.includes(id));
 
         if (allSelected) {
-          return selectedRowKeys.filter((k) => !pageIds.includes(k as any));
+          return selectedRowKeys.filter((k) => !pageIds.includes(k));
         }
 
-        const next = new Set(selectedRowKeys);
-        pageIds.forEach((id) => next.add(id as any));
+        const next = new Set<Key>(selectedRowKeys);
+        pageIds.forEach((id) => next.add(id));
         return Array.from(next);
       })(),
     );
-  };
+  }, [rows, selectedRowKeys, onSelectedRowKeysChange]);
 
   const columns = useMemo(() => createProductsColumns({ styles, onEdit }), [onEdit]);
 
@@ -82,20 +83,33 @@ export function ProductsTable({
         allCheckedOnPage,
         onToggleSelectAllOnPage: toggleSelectAllOnPage,
       }),
-    [selectedRowKeys, onSelectedRowKeysChange, allCheckedOnPage],
+    [selectedRowKeys, onSelectedRowKeysChange, allCheckedOnPage, toggleSelectAllOnPage],
   );
 
   const onChangeTable = (
     _pagination: TablePaginationConfig,
     _filters: Record<string, unknown>,
-    sorter: any,
+    sorter: SorterResult<Product> | SorterResult<Product>[],
   ) => {
     const next = Array.isArray(sorter) ? sorter[0] : sorter;
-    if (!next?.order) {
+    const { order: nextOrder, field: nextField } = next ?? {};
+
+    if (!nextOrder) {
       onSortChange({});
       return;
     }
-    onSortChange({ field: next.field as keyof Product, order: next.order });
+
+    const field = Array.isArray(nextField) ? nextField[0] : nextField;
+
+    if (!field) {
+      onSortChange({});
+      return;
+    }
+
+    onSortChange({
+      field: field as keyof Product,
+      order: nextOrder as SortState['order'],
+    });
   };
 
   return (
