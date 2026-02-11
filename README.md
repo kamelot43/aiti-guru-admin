@@ -1,73 +1,60 @@
-# React + TypeScript + Vite
+# Aiti Guru Admin
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Административное веб-приложение (тестовое задание) с авторизацией и страницей списка товаров.
+Основной фокус — работа с таблицами, формами и взаимодействием с публичным API.
 
-Currently, two official plugins are available:
+## Функциональность
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Авторизация
+- Форма входа с валидацией обязательных полей.
+- Обработка ошибок авторизации (ошибка от API показывается пользователю).
+- Запоминание сессии:
+    - **Remember = true** → токен сохраняется в `localStorage` (сессия переживает закрытие браузера).
+    - **Remember = false** → токен сохраняется в `sessionStorage` (сессия сбрасывается при закрытии вкладки/браузера).
+- После успешного входа — редирект на страницу `/products`.
 
-## React Compiler
+### Товары
+- Загрузка данных из API DummyJSON Products.
+- Пагинация (`limit/skip`).
+- Сортировка по столбцам (с хранением состояния сортировки).
+- Поиск через API (`/products/search`), оптимизированный через `lodash.debounce`.
+- Обновление списка (кнопка refresh).
+- Добавление товара через `/products/add` (симуляция) + toast уведомление.
+- Редактирование товара через `/products/:id` (симуляция) + toast уведомление.
+- UI-логика:
+    - рейтинг < 3 подсвечивается красным;
+    - выделение строк таблицы (без дальнейшего действия по ТЗ).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Стек
 
-## Expanding the ESLint configuration
+- **React 19** + **TypeScript (strict)**
+- **Vite** — сборка/дев-сервер
+- **Ant Design** — UI компоненты
+- **React Router** — маршрутизация (включая protected routes)
+- **Sass (SCSS modules)** — стили
+- **ESLint + Prettier** — качество кода и форматирование
+- **lodash.debounce** — debounce для поиска
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## API
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Используется публичное API: **DummyJSON**
+- Auth: `https://dummyjson.com/auth/login`, `https://dummyjson.com/auth/me`
+- Products:
+    - `GET https://dummyjson.com/products?limit=..&skip=..`
+    - `GET https://dummyjson.com/products/search?q=..&limit=..&skip=..`
+    - `GET https://dummyjson.com/products?sortBy=..&order=asc|desc`
+    - `POST https://dummyjson.com/products/add`
+    - `PUT/PATCH https://dummyjson.com/products/:id`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+> Добавление/редактирование на сервере не сохраняется — API возвращает “симулированный” результат.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+## Требования
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Node.js + pnpm
+- Chrome (актуальная версия)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+## Установка и запуск
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+```bash
+pnpm install
+pnpm dev
