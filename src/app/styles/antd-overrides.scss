@@ -1,14 +1,21 @@
 :where(.ant-app),
 :where(.ant-typography),
 :where(.ant-btn),
-:where(.ant-input),
 :where(.ant-input-affix-wrapper),
 :where(.ant-table),
 :where(.ant-table-wrapper),
 :where(.ant-modal),
 :where(.ant-form),
 :where(.ant-pagination) {
-  font-family: var(--font-body);
+  font-family: var(--font-open-sans);
+}
+
+:where(.ant-input),
+:where(.ant-input-affix-wrapper),
+:where(.ant-checkbox-wrapper),
+:where(.ant-btn),
+:where(.ant-form-item-label > label) {
+  font-family: var(--font-intel) !important;
 }
 
 /* Headings inside Ant Typography -> Intel */
@@ -18,7 +25,7 @@
 :where(.ant-typography) h4,
 :where(.ant-typography) h5,
 :where(.ant-typography) h6 {
-  font-family: var(--font-heading);
+  font-family: var(--font-intel);
 }
 
 :where(.ant-table-wrapper) {
@@ -52,17 +59,31 @@
   }
 }
 
+:where(.ant-form-vertical) {
+  width: 100%;
+}
+
 :where(.ant-form-vertical) .ant-form-item-label > label {
-  font-weight: var(--fw-semibold);
-  color: var(--color-text);
-  font-size: 16px;
+  font-weight: var(--fw-semibold) !important;
+  color: var(--color-text) !important;
+  font-size: 16px !important;
 }
 
 /* Inputs */
 :where(.ant-input),
 :where(.ant-input-affix-wrapper) {
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   border-color: var(--color-border);
+  font-size: 18px !important;
+  font-weight: 500 !important;
+}
+
+:where(.ant-input-affix-wrapper) {
+  padding: 14px 16px !important;
+}
+
+:where(.ant-form-item) {
+  margin-bottom: 16px !important;
 }
 
 :where(.ant-input-affix-wrapper:hover) {
@@ -76,8 +97,8 @@
 
 /* Checkbox */
 :where(.ant-checkbox-inner) {
-  width: 18px;
-  height: 18px;
+  width: 20px !important;
+  height: 20px !important;
   border-radius: 5px;
   border-color: var(--gray-300);
 }
@@ -85,6 +106,17 @@
 :where(.ant-checkbox-checked) .ant-checkbox-inner {
   background: var(--color-primary);
   border-color: var(--color-primary);
+
+  &:after {
+    inset-inline-start: 30% !important;
+  }
+}
+
+:where(.ant-checkbox-label) {
+  font-size: 16px !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  color: #9C9C9C !important;
 }
 
 /* Divider */

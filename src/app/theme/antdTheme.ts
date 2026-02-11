@@ -12,7 +12,21 @@ export const antdTheme: ThemeConfig = {
   },
 
   components: {
-    Button: { borderRadius: 12 },
+    Button: {
+      controlHeight: 44,
+      controlHeightLG: 54,
+      controlHeightSM: 36,
+
+      paddingInline: 20,
+      paddingInlineLG: 16,
+      paddingInlineSM: 14,
+
+      fontSize: 14,
+      fontSizeLG: 18,
+      fontSizeSM: 13,
+
+      borderRadius: 12,
+    },
     Input: { borderRadius: 12 },
     Table: { borderRadius: 16 },
     Modal: { borderRadius: 16 },

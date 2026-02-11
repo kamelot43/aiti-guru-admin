@@ -56,17 +56,17 @@
 }
 
 :root {
-  --font-body:
+  --font-open-sans:
     'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
     sans-serif;
-  --font-heading: 'Intel', 'Open Sans', sans-serif;
+  --font-intel: 'Intel', 'Open Sans', sans-serif;
 
   /* colors (base) */
   --color-bg: #ffffff;
   --color-surface: #ffffff;
-  --color-text: #0f172a;
-  --color-muted: #64748b;
-  --color-border: #e6eaf2;
+  --color-text: #232323;
+  --color-muted: #E0E0E0;
+  --color-border: #EDEDED;
 
   /* brand / states */
   --color-primary: #242edb;
@@ -86,7 +86,7 @@
 
   /* grays */
   --gray-50: #f8fafc;
-  --gray-100: #f1f5f9;
+  --gray-100: #F9F9F9;
   --gray-200: #e2e8f0;
   --gray-300: #cbd5e1;
   --gray-400: #94a3b8;
@@ -98,8 +98,8 @@
   --text-p-size: 14px;
   --text-p-lh: 22px;
 
-  --h1-size: 32px;
-  --h1-lh: 40px;
+  --h1-size: 40px;
+  --h1-lh: 44px;
 
   --h2-size: 28px;
   --h2-lh: 36px;
@@ -146,7 +146,7 @@ body {
   margin: 0;
   background: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-body);
+  font-family: var(--font-open-sans);
   font-size: var(--text-p-size);
   line-height: var(--text-p-lh);
 }
@@ -169,7 +169,7 @@ h4,
 h5,
 h6 {
   margin: 0;
-  font-family: var(--font-heading);
+  font-family: var(--font-intel);
   color: var(--color-text);
 }
 

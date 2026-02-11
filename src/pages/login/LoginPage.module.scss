@@ -3,63 +3,87 @@
   display: grid;
   place-items: center;
   padding: 24px;
-  background: radial-gradient(
-    1200px 700px at 50% -10%,
-    var(--login-bg-1) 20%,
-    var(--login-bg-2) 70%
+  background: var(--gray-100);
+}
+
+.cardOuter {
+  width: 527px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  flex-shrink: 0;
+
+  border-radius: 40px;
+  background: #fff;
+  box-shadow: 0 24px 32px rgba(0, 0, 0, 0.04);
+}
+
+.cardInner {
+  width: 100%;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  align-self: stretch;
+
+  border-radius: 34px;
+  border: 1px solid #ededed;
+  background: linear-gradient(
+    180deg,
+    rgba(35, 35, 35, 0.03) 0%,
+    rgba(35, 35, 35, 0) 50%
   );
 }
 
-.card {
-  width: 515px;
-  border-radius: var(--radius-2xl);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-lg);
-  padding: 48px 50px;
-}
-
 .logo {
-  width: 64px;
-  height: 64px;
-  border-radius: 999px;
-  margin: 0 auto 24px;
-  background: var(--gray-100);
-  display: grid;
-  place-items: center;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  margin: 0 auto;
+
+  border: 1px solid rgba(237, 237, 237, 0.7);
+  background: linear-gradient(0deg, rgba(35, 35, 35, 0) 50%, rgba(35, 35, 35, 0.06) 100%), #fff;
+  box-shadow:
+    0 4px 4px rgba(0, 0, 0, 0.25),
+    0 0 0 2px #fff,
+    0 12px 8px rgba(0, 0, 0, 0.03);
 
   img {
-    width: 32px;
-    height: 32px;
+    width: 35px;
+    height: 35px;
     object-fit: contain;
   }
 }
 
 .title {
-  margin: 0;
-  font-size: 40px;
-  line-height: 1.05;
-  font-weight: var(--fw-semibold);
   text-align: center;
-  color: var(--color-text);
-  font-family: var(--font-heading);
+  margin-bottom: 12px;
 }
 
 .subtitle {
-  margin-top: 12px;
-  margin-bottom: 32px;
+  font-family: var(--font-intel);
   font-weight: var(--fw-medium);
   text-align: center;
-  color: var(--gray-400);
+  color: var(--color-muted);
   font-size: 18px;
+  line-height: 150%;
+  margin: 0;
 }
 
+/* mobile */
 @media (max-width: 560px) {
-  .card {
+  .cardOuter {
     width: 100%;
-    padding: 36px 24px;
   }
 
-  .title {
-    font-size: 38px;
+  .cardInner {
+    padding: 36px 24px;
   }
 }

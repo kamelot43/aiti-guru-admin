@@ -9,16 +9,20 @@ export function LoginPage() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.card}>
-        <div className={styles.logo}>
-          <img src={logo} alt="Logo" />
-        </div>
+           <div className={styles.cardOuter}>
+             <div className={styles.cardInner}>
+               <div className={styles.logo}>
+                 <img src={logo} alt="Logo" />
+               </div>
 
-        <h1 className={styles.title}>Добро пожаловать!</h1>
-        <p className={styles.subtitle}>Пожалуйста, авторизируйтесь</p>
+               <div>
+                 <h1 className={styles.title}>Добро пожаловать !</h1>
+                 <p className={styles.subtitle}>Пожалуйста, авторизируйтесь</p>
+               </div>
 
-        <LoginForm onSubmit={handleSubmit} onCreateAccountClick={() => console.log('stub')} />
-      </div>
+               <LoginForm onSubmit={handleSubmit} onCreateAccountClick={() => console.log('stub')} />
+             </div>
+           </div>
     </div>
   );
 }
