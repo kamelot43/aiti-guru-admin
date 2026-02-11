@@ -16,7 +16,7 @@ export function LoginPage() {
           </div>
 
           <div>
-            <h1 className={styles.title}>Добро пожаловать !</h1>
+            <h1 className={styles.title}>Добро пожаловать<span className={styles.exclamation}>!</span></h1>
             <p className={styles.subtitle}>Пожалуйста, авторизируйтесь</p>
           </div>
 

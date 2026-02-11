@@ -32,7 +32,7 @@ export async function loginApi(body: LoginRequest): Promise<LoginResponse> {
   const res = await fetch(`${BASE_URL}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
+    // credentials: 'include',
     body: JSON.stringify(body),
   });
 
@@ -57,7 +57,7 @@ export async function authMeApi(accessToken: string): Promise<AuthMeResponse> {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
-    credentials: 'include',
+    // credentials: 'include',
   });
 
   let data;
