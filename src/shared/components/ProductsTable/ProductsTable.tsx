@@ -29,11 +29,24 @@ type Props = {
   onEdit: (product: ProductRow) => void;
 };
 
-function formatPriceRub(value: number) {
-  return new Intl.NumberFormat('ru-RU', {
+function formatPriceParts(value: number) {
+  const parts = new Intl.NumberFormat('ru-RU', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(value);
+  }).formatToParts(value);
+
+  const rub: string[] = [];
+  const kop: string[] = [];
+
+  parts.forEach((p) => {
+    if (p.type === 'fraction') kop.push(p.value);
+    else rub.push(p.value);
+  });
+
+  return {
+    rub: rub.join('').replace(/[,\.]$/, ''),
+    kop: kop.join(''),
+  };
 }
 
 export function ProductsTable({
@@ -96,7 +109,13 @@ export function ProductsTable({
       sorter: true,
       render: (v: string) => <span className={styles.vendor}>{v}</span>,
     },
-    { title: 'Артикул', dataIndex: 'sku', key: 'sku', sorter: true },
+    {
+      title: 'Артикул',
+      dataIndex: 'sku',
+      key: 'sku',
+      sorter: true,
+      render: (v: string) => <span className={styles.sku}>{v}</span>,
+    },
     {
       title: 'Оценка',
       dataIndex: 'rating',
@@ -116,7 +135,14 @@ export function ProductsTable({
       sorter: true,
       render: (price: number) => {
         const safe = typeof price === 'number' ? price : 0;
-        return <span className={styles.price}>{formatPriceRub(safe)}</span>;
+        const { rub, kop } = formatPriceParts(safe);
+
+        return (
+          <span className={styles.price}>
+            {rub}
+            <span className={styles.priceFraction}>,{kop}</span>
+          </span>
+        );
       },
     },
     {
@@ -233,7 +259,7 @@ export function ProductsTable({
 
       <div className={styles.footer}>
         <div className={styles.counter}>
-          Показано {from}-{to} из {total}
+          Показано <span>{from}-{to}</span> из <span>{total}</span>
         </div>
 
         <Pagination

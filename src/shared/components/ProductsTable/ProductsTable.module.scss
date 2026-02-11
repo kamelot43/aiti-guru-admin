@@ -1,6 +1,7 @@
 .wrap {
   background: var(--color-surface);
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 20px;
   overflow: hidden;
 }
 
@@ -59,9 +60,9 @@
 }
 
 .thumb {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
   overflow: hidden;
   background: var(--gray-100);
   flex-shrink: 0;
@@ -81,31 +82,52 @@
 }
 
 .nameTitle {
+  font-family: var(--font-cairo);
+  font-size: var(--text-p-size);
   font-weight: var(--fw-bold);
   color: var(--color-text);
 }
 
 .nameSub {
-  color: var(--gray-500);
-  font-size: 12px;
+  font-family: var(--font-cairo);
+  color: var(--gray-300);
+  font-size: 14px;
 }
 
 .vendor {
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
+  font-size: var(--text-p-size);
+  color: var(--color-text);
+}
+
+.sku {
+  font-weight: var(--fw-normal);
+  font-size: var(--text-p-size);
+  color: var(--color-text);
 }
 
 .ratingOk {
+  font-size: var(--text-p-size);
   color: var(--color-text);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-normal);
 }
 
 .ratingBad {
+  font-size: var(--text-p-size);
   color: var(--color-danger);
-  font-weight: var(--fw-bold);
+  font-weight: var(--fw-noraml);
 }
 
 .price {
+  font-family: var(--font-roboto);
+  font-size: var(--text-p-size);
   font-variant-numeric: tabular-nums;
+}
+
+.priceFraction {
+  font-family: var(--font-roboto);
+  font-size: var(--text-p-size);
+  color: #999;
 }
 
 /* Actions */
@@ -116,7 +138,7 @@
 }
 
 .addToCartBtn {
-  min-width: 75px;
+  min-width: 52px;
 }
 
 .moreBtn {
@@ -136,5 +158,12 @@
 }
 
 .counter {
-  color: var(--gray-500);
+  font-family: var(--font-roboto);
+  font-size: 18px;
+  color: var(--gray-600);
+  font-weight: var(--fw-noraml);
+
+  span {
+    color: var(--color-text);
+  }
 }

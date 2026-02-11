@@ -71,7 +71,7 @@ export function ProductModal({ open, mode, product, onClose, onSubmit }: Props) 
 
         <div className={styles.grid}>
           <Form.Item
-            label="Цена, ₽"
+            label="Цена, руб"
             name="price"
             rules={[{ required: true, message: 'Введите цену' }]}
           >

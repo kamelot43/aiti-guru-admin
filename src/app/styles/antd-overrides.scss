@@ -36,7 +36,7 @@
 
   .ant-table-thead > tr > th {
     font-family: var(--font-cairo);
-    color: #B2B3B9 !important;
+    color: #b2b3b9 !important;
     font-size: 16px;
     font-style: normal;
     font-weight: 700 !important;
@@ -116,10 +116,10 @@
 }
 
 :where(.ant-checkbox-label) {
-  font-size: 16px !important;
-  font-style: normal !important;
-  font-weight: 500 !important;
-  color: #9C9C9C !important;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  color: #9c9c9c;
 }
 
 /* Divider */

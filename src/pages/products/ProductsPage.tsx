@@ -43,7 +43,7 @@ export function ProductsPage() {
       debounce((value: string) => {
         setSearchQuery(value);
         setPage(1);
-      }, 800),
+      }, 1000),
     [],
   );
 
@@ -181,8 +181,8 @@ export function ProductsPage() {
           </Typography.Title>
 
           <div className={styles.headerActions}>
-            <Button icon={<ReloadOutlined />} onClick={load} loading={loading} disabled={loading} />
-            <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>
+            <Button icon={<ReloadOutlined />} size="medium" onClick={load} loading={loading} disabled={loading} />
+            <Button type="primary" icon={<PlusOutlined />} size="medium" onClick={openCreate}>
               Добавить
             </Button>
           </div>

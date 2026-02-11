@@ -25,7 +25,7 @@
   margin: 0 auto;
   border-radius: 8px;
   padding: 12px 20px !important;
-  background-color: #F3F3F3;
+  background-color: var(--gray-100);
 
   :where(.ant-input) {
     font-size: 14px;

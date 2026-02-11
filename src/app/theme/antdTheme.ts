@@ -13,11 +13,11 @@ export const antdTheme: ThemeConfig = {
 
   components: {
     Button: {
-      controlHeight: 44,
+      controlHeight: 42,
       controlHeightLG: 54,
       controlHeightSM: 27,
 
-      paddingInline: 20,
+      paddingInline: 10,
       paddingInlineLG: 16,
       paddingInlineSM: 14,
 
@@ -30,5 +30,6 @@ export const antdTheme: ThemeConfig = {
     Input: { borderRadius: 12 },
     Table: { borderRadius: 16 },
     Modal: { borderRadius: 16 },
+    Pagination: { borderRadius: 4 },
   },
 };

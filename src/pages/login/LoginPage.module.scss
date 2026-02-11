@@ -32,11 +32,7 @@
 
   border-radius: 34px;
   border: 1px solid #ededed;
-  background: linear-gradient(
-    180deg,
-    rgba(35, 35, 35, 0.03) 0%,
-    rgba(35, 35, 35, 0) 50%
-  );
+  background: linear-gradient(180deg, rgba(35, 35, 35, 0.03) 0%, rgba(35, 35, 35, 0) 50%);
 }
 
 .logo {
@@ -71,7 +67,7 @@
   font-family: var(--font-intel);
   font-weight: var(--fw-medium);
   text-align: center;
-  color: var(--color-muted);
+  color: var(--gray-400);
   font-size: 18px;
   line-height: 150%;
   margin: 0;
