@@ -1,14 +1,29 @@
+import { Button } from 'antd';
 import { Link } from 'react-router-dom';
+import styles from './NotFoundPage.module.scss';
 
 export function NotFoundPage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="space-y-3 text-center">
-        <div className="text-2xl font-semibold">Страница не найдена</div>
-        <Link className="underline" to="/products">
-          На главную
-        </Link>
-      </div>
-    </div>
-  );
+    return (
+        <div className={styles.page}>
+            <div className={styles.card}>
+                <div className={styles.code}>404</div>
+                <div className={styles.title}>Страница не найдена</div>
+                <div className={styles.desc}>
+                    Возможно, ссылка устарела или страница была перемещена.
+                </div>
+
+                <div className={styles.actions}>
+                    <Link to="/products">
+                        <Button type="primary" size="medium">
+                            На главную
+                        </Button>
+                    </Link>
+
+                    <Button size="medium" onClick={() => window.history.back()}>
+                        Назад
+                    </Button>
+                </div>
+            </div>
+        </div>
+    );
 }
