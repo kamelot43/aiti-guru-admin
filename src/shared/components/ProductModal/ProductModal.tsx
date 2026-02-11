@@ -1,7 +1,14 @@
-import { Button, Form, Input, InputNumber, Modal } from 'antd';
+// react
 import { useEffect } from 'react';
+
+// antd
+import { Button, Form, Input, InputNumber, Modal } from 'antd';
+
+// api / types
+import type { Product } from '../../api/productsApi';
+
+// styles
 import styles from './ProductModal.module.scss';
-import type { ProductRow } from '../../products.mock';
 
 export type ProductModalMode = 'create' | 'edit';
 
@@ -15,7 +22,7 @@ export type ProductFormValues = {
 type Props = {
   open: boolean;
   mode: ProductModalMode;
-  product?: ProductRow | null;
+  product?: Product | null;
   onClose: () => void;
   onSubmit: (values: ProductFormValues) => void;
 };

@@ -1,3 +1,5 @@
+import {BASE_URL} from "./const";
+
 export type Product = {
   id: number;
   title: string;
@@ -25,8 +27,6 @@ type Params = {
   search?: string;
   signal?: AbortSignal;
 };
-
-const BASE_URL = 'https://dummyjson.com';
 
 export async function fetchProducts(params: Params): Promise<ProductsResponse> {
   const { limit, skip, sortBy, order, search, signal } = params;

@@ -1,20 +1,27 @@
-import { Button, Pagination, Table } from 'antd';
-import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
-import type { TableRowSelection } from 'antd/es/table/interface';
-import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
+// react
 import type { Key } from 'react';
-import { message } from 'antd';
+import { useMemo } from 'react';
 
+// antd
+import { Pagination, Table} from 'antd';
+import type { TablePaginationConfig } from 'antd/es/table';
+
+// api / types
+import type { Product } from '../../api/productsApi';
+
+// libs
+import { createProductsColumns, createProductsRowSelection } from './productsTableConfig';
+
+// styles
 import styles from './ProductsTable.module.scss';
-import type { ProductRow } from '../../../pages/products/products.mock';
 
 type SortState = {
-  field?: keyof ProductRow;
+  field?: keyof Product;
   order?: 'ascend' | 'descend';
 };
 
 type Props = {
-  rows: ProductRow[];
+  rows: Product[];
   total: number;
   page: number;
   pageSize: number;
@@ -26,28 +33,8 @@ type Props = {
   onPageChange: (page: number) => void;
   onSortChange: (sort: SortState) => void;
 
-  onEdit: (product: ProductRow) => void;
+  onEdit: (product: Product) => void;
 };
-
-function formatPriceParts(value: number) {
-  const parts = new Intl.NumberFormat('ru-RU', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).formatToParts(value);
-
-  const rub: string[] = [];
-  const kop: string[] = [];
-
-  parts.forEach((p) => {
-    if (p.type === 'fraction') kop.push(p.value);
-    else rub.push(p.value);
-  });
-
-  return {
-    rub: rub.join('').replace(/[,\.]$/, ''),
-    kop: kop.join(''),
-  };
-}
 
 export function ProductsTable({
   rows,
@@ -84,139 +71,19 @@ export function ProductsTable({
     );
   };
 
-  const columns: ColumnsType<ProductRow> = [
-    {
-      title: 'Наименование',
-      dataIndex: 'title',
-      key: 'title',
-      sorter: true,
-      render: (_, row) => (
-        <div className={styles.nameCell}>
-          <div className={styles.thumb}>
-            {row.thumbnail && <img src={row.thumbnail} alt={row.title} loading="lazy" />}
-          </div>
-          <div className={styles.nameText}>
-            <div className={styles.nameTitle}>{row.title}</div>
-            <div className={styles.nameSub}>{row.category}</div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: 'Вендор',
-      dataIndex: 'brand',
-      key: 'brand',
-      sorter: true,
-      render: (v: string) => <span className={styles.vendor}>{v}</span>,
-    },
-    {
-      title: 'Артикул',
-      dataIndex: 'sku',
-      key: 'sku',
-      sorter: true,
-      render: (v: string) => <span className={styles.sku}>{v}</span>,
-    },
-    {
-      title: 'Оценка',
-      dataIndex: 'rating',
-      key: 'rating',
-      sorter: true,
-      render: (rating: number) => {
-        const safe = typeof rating === 'number' ? rating : 0;
-        const cls = safe < 3 ? styles.ratingBad : styles.ratingOk;
-        return <span className={cls}>{safe.toFixed(1)}/5</span>;
-      },
-    },
-    {
-      title: 'Цена, ₽',
-      dataIndex: 'price',
-      key: 'price',
-      align: 'right',
-      sorter: true,
-      render: (price: number) => {
-        const safe = typeof price === 'number' ? price : 0;
-        const { rub, kop } = formatPriceParts(safe);
+  const columns = useMemo(() => createProductsColumns({ styles, onEdit }), [onEdit]);
 
-        return (
-          <span className={styles.price}>
-            {rub}
-            <span className={styles.priceFraction}>,{kop}</span>
-          </span>
-        );
-      },
-    },
-    {
-      title: '',
-      key: 'actions',
-      width: 120,
-      align: 'right',
-      render: (_: unknown, row: ProductRow) => (
-        <div className={styles.rowActions}>
-          <Button
-            type="primary"
-            shape="round"
-            size="small"
-            icon={<PlusOutlined />}
-            className={styles.addToCartBtn}
-            onClick={(e) => {
-              e.stopPropagation();
-              message.success('Товар добавлен в корзину');
-            }}
-          />
-          <Button
-            type="default"
-            shape="circle"
-            size="small"
-            icon={<MoreOutlined />}
-            className={styles.moreBtn}
-            onClick={(e) => {
-              e.stopPropagation();
-              onEdit(row);
-            }}
-          />
-        </div>
-      ),
-    },
-    { title: '', key: 'spacer', width: 120, render: () => null },
-  ];
-
-  const rowSelection: TableRowSelection<ProductRow> = {
-    selectedRowKeys,
-    onChange: (keys) => onSelectedRowKeysChange(keys),
-
-    columnTitle: (
-      <button
-        type="button"
-        className={`${styles.tableCheckbox} ${allCheckedOnPage ? styles.tableCheckboxChecked : ''}`}
-        aria-checked={allCheckedOnPage}
-        role="checkbox"
-        onClick={(e) => {
-          e.stopPropagation();
-          toggleSelectAllOnPage();
-        }}
-      />
-    ),
-
-    renderCell: (checked, record) => (
-      <button
-        type="button"
-        className={`${styles.tableCheckbox} ${checked ? styles.tableCheckboxChecked : ''}`}
-        aria-checked={checked}
-        role="checkbox"
-        onClick={(e) => {
-          e.stopPropagation();
-          onSelectedRowKeysChange(
-            (() => {
-              const has = selectedRowKeys.includes(record.id);
-              return has
-                ? selectedRowKeys.filter((k) => k !== record.id)
-                : [...selectedRowKeys, record.id];
-            })(),
-          );
-        }}
-      />
-    ),
-  };
+  const rowSelection = useMemo(
+    () =>
+      createProductsRowSelection({
+        styles,
+        selectedRowKeys,
+        onSelectedRowKeysChange,
+        allCheckedOnPage,
+        onToggleSelectAllOnPage: toggleSelectAllOnPage,
+      }),
+    [selectedRowKeys, onSelectedRowKeysChange, allCheckedOnPage],
+  );
 
   const onChangeTable = (
     _pagination: TablePaginationConfig,
@@ -228,12 +95,12 @@ export function ProductsTable({
       onSortChange({});
       return;
     }
-    onSortChange({ field: next.field as keyof ProductRow, order: next.order });
+    onSortChange({ field: next.field as keyof Product, order: next.order });
   };
 
   return (
     <div className={styles.wrap}>
-      <Table<ProductRow>
+      <Table<Product>
         rowKey="id"
         loading={loading}
         onRow={(record) => ({
@@ -259,7 +126,11 @@ export function ProductsTable({
 
       <div className={styles.footer}>
         <div className={styles.counter}>
-          Показано <span>{from}-{to}</span> из <span>{total}</span>
+          Показано{' '}
+          <span>
+            {from}-{to}
+          </span>{' '}
+          из <span>{total}</span>
         </div>
 
         <Pagination

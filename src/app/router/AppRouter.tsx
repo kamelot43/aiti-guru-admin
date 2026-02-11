@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { LoginPage } from '@/pages/login/LoginPage';
-import { ProductsPage } from '@/pages/products/ProductsPage';
+import {LoginPage} from "../../pages/login/LoginPage";
+import {ProductsPage} from "../../pages/products/ProductsPage";
 import { NotFoundPage } from '../../pages/not-found/NotFoundPage';
 import { RequireAuth } from '../../shared/auth/RequireAuth';
 import { PublicRoute } from '../../shared/auth/PublicRoute';

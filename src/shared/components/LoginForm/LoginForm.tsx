@@ -1,10 +1,27 @@
-import { Button, Checkbox, Divider, Form, Input, message } from 'antd';
-import { LockOutlined, UserOutlined, EyeInvisibleOutlined, EyeOutlined, CloseOutlined } from '@ant-design/icons';
+// react
 import { useState } from 'react';
+
+// router
 import { useNavigate } from 'react-router-dom';
-import styles from './LoginForm.module.scss';
+
+// antd
+import { Button, Checkbox, Divider, Form, Input, message } from 'antd';
+import {
+  CloseOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  LockOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
+
+// api
 import { loginApi } from '../../api/auth';
+
+// hooks / providers
 import { useAuth } from '../../../app/providers/AuthProvider';
+
+// styles
+import styles from './LoginForm.module.scss';
 
 export type LoginFormValues = {
   username: string;

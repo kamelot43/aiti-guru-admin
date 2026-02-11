@@ -21,12 +21,14 @@ import type { Product } from '../../shared/api/productsApi';
 import { addProductApi, fetchProducts, updateProductApi } from '../../shared/api/productsApi';
 
 // components
-import { ProductModal, type ProductFormValues } from '../../shared/components/ProductModal/ProductModal';
+import {
+  ProductModal,
+  type ProductFormValues,
+} from '../../shared/components/ProductModal/ProductModal';
 import { ProductsTable } from '../../shared/components/ProductsTable/ProductsTable';
 
 // styles
 import styles from './ProductsPage.module.scss';
-
 
 type SortState = {
   field?: keyof Product;
@@ -60,30 +62,30 @@ export function ProductsPage() {
     [],
   );
   const handleProductSubmit = useCallback(
-      async (values: ProductFormValues) => {
-        try {
-          if (productModalMode === 'create') {
-            const created = await addProductApi(values);
+    async (values: ProductFormValues) => {
+      try {
+        if (productModalMode === 'create') {
+          const created = await addProductApi(values);
 
-            setRows((prev) => [created, ...prev]);
+          setRows((prev) => [created, ...prev]);
 
-            message.success('Товар добавлен');
-          } else if (editingProduct) {
-            const updated = await updateProductApi(editingProduct.id, values);
+          message.success('Товар добавлен');
+        } else if (editingProduct) {
+          const updated = await updateProductApi(editingProduct.id, values);
 
-            setRows((prev) =>
-                prev.map((p) => (p.id === editingProduct.id ? { ...p, ...updated } : p)),
-            );
+          setRows((prev) =>
+            prev.map((p) => (p.id === editingProduct.id ? { ...p, ...updated } : p)),
+          );
 
-            message.success('Товар обновлён');
-          }
-
-          closeModal();
-        } catch {
-          message.error('Ошибка операции');
+          message.success('Товар обновлён');
         }
-      },
-      [productModalMode, editingProduct],
+
+        closeModal();
+      } catch {
+        message.error('Ошибка операции');
+      }
+    },
+    [productModalMode, editingProduct],
   );
   const pageSize = 20;
 
@@ -112,8 +114,7 @@ export function ProductsPage() {
     return controller;
   };
 
-  const isAbortError = (e: unknown) =>
-      e instanceof DOMException && e.name === 'AbortError';
+  const isAbortError = (e: unknown) => e instanceof DOMException && e.name === 'AbortError';
 
   const load = async () => {
     const controller = startRequest();
@@ -201,7 +202,13 @@ export function ProductsPage() {
           </Typography.Title>
 
           <div className={styles.headerActions}>
-            <Button icon={<ReloadOutlined />} size="medium" onClick={load} loading={loading} disabled={loading} />
+            <Button
+              icon={<ReloadOutlined />}
+              size="medium"
+              onClick={load}
+              loading={loading}
+              disabled={loading}
+            />
             <Button type="primary" icon={<PlusOutlined />} size="medium" onClick={openCreate}>
               Добавить
             </Button>

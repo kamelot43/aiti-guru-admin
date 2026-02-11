@@ -1,3 +1,5 @@
+import {BASE_URL} from "./const";
+
 export type LoginRequest = {
   username: string;
   password: string;
@@ -25,8 +27,6 @@ export type AuthMeResponse = {
   gender: string;
   image: string;
 };
-
-const BASE_URL = 'https://dummyjson.com';
 
 export async function loginApi(body: LoginRequest): Promise<LoginResponse> {
   const res = await fetch(`${BASE_URL}/auth/login`, {
