@@ -18,8 +18,8 @@ https://aiti-guru-admin-iota.vercel.app/
 
 ## Для тестирования авторизации:
 
-логин: **emilys**
-пароль: **emilyspass**
+- логин: **emilys**
+- пароль: **emilyspass**
 
 ### Товары
 - Загрузка данных из API DummyJSON Products.
